@@ -1,4 +1,5 @@
 // context_menu.js
+
 function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -12,7 +13,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'sync' && changes.prompts) {
+    if (area === 'local' && changes.prompts) {
         console.log("Prompts changed in storage. Updating context menu...");
         updateContextMenu();
     }
@@ -20,14 +21,13 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 function updateContextMenu() {
     chrome.contextMenus.removeAll(() => {
-        // 親メニューを作成
         chrome.contextMenus.create({
             id: "promptInserterParent",
             title: "Prompt Inserter",
             contexts: ["editable"]
         });
 
-        chrome.storage.sync.get({ prompts: [] }, (data) => {
+        chrome.storage.local.get({ prompts: [] }, (data) => {
             if (chrome.runtime.lastError) {
                 console.error("Error getting prompts from storage:", chrome.runtime.lastError);
                 return;
@@ -36,8 +36,12 @@ function updateContextMenu() {
             console.log("Loaded prompts:", prompts);
 
             if (prompts && prompts.length > 0) {
-                // プロンプトがある場合は、それぞれを子メニューとして追加
                 prompts.forEach((prompt) => {
+                    if (prompt.title.includes('-')) {
+                        console.log("Skipping context menu item for:", prompt.title);
+                        return;
+                    }
+
                     chrome.contextMenus.create({
                         id: prompt.promptId,
                         title: prompt.title,
@@ -51,7 +55,6 @@ function updateContextMenu() {
                 });
             }
 
-            // 「プロンプトを追加する」メニュー項目を *最後* に作成
             chrome.contextMenus.create({
                 id: "addPrompt",
                 title: "プロンプトを追加する",
@@ -64,64 +67,22 @@ function updateContextMenu() {
     });
 }
 
-// コンテキストメニューがクリックされたときの処理 (変更なし)
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     console.log("Context menu item clicked:", info.menuItemId);
     if (info.menuItemId === "addPrompt") {
-        // 「プロンプトを追加する」がクリックされたら、オプションページを開く
         chrome.runtime.openOptionsPage();
         return;
     }
 
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: checkAndInsert,
-        args: [info.menuItemId]
-    }, (results) => {
+    // content_script.js にメッセージを送信
+    chrome.tabs.sendMessage(tab.id, {
+        action: "insertPrompt",
+        promptId: info.menuItemId
+    }, (response) => {
         if (chrome.runtime.lastError) {
-            console.error("Error executing script:", chrome.runtime.lastError);
-            return;
+            console.error("Error sending message:", chrome.runtime.lastError);
+        } else {
+            console.log("Response from content script:", response); // 応答をログ出力
         }
     });
 });
-
-function checkAndInsert(promptId) {
-    let activeElement = document.activeElement;
-    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-        chrome.storage.sync.get({ prompts: [] }, (data) => {
-            const prompts = data.prompts;
-            const selectedPrompt = prompts.find(p => p.promptId === promptId);
-
-            if(selectedPrompt) {
-                let startPos = activeElement.selectionStart;
-                let endPos = activeElement.selectionEnd;
-                activeElement.value = activeElement.value.substring(0, startPos) + selectedPrompt.content + activeElement.value.substring(endPos);
-                activeElement.selectionStart = activeElement.selectionEnd = startPos + selectedPrompt.content.length;
-                activeElement.focus();
-            }
-        });
-
-    } else if (activeElement && activeElement.isContentEditable) {
-        // contenteditable の場合の処理
-        chrome.storage.sync.get({ prompts: [] }, (data) => {
-            const prompts = data.prompts;
-            const selectedPrompt = prompts.find(p => p.promptId === promptId);
-            if(selectedPrompt){
-                const selection = window.getSelection();
-                if (selection.rangeCount > 0) {
-                    const range = selection.getRangeAt(0);
-                    range.deleteContents();
-                    const textNode = document.createTextNode(selectedPrompt.content);
-                    range.insertNode(textNode);
-                    range.setStartAfter(textNode);
-                    range.setEndAfter(textNode);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                }
-                activeElement.focus();
-            }
-        });
-    } else {
-        console.log("Clicked element is not editable.");
-    }
-}

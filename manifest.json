@@ -13,6 +13,16 @@
   "background": {
     "service_worker": "context_menu.js"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content_script.js"
+      ]
+    }
+  ],
   "icons": {
     "16": "images/icon16.png",
     "48": "images/icon48.png",
