@@ -20,7 +20,6 @@ body {
     border-radius: 8px;
     padding: 30px;
     width: 80%;
-    max-width: 800px;
     margin-top: 20px;
     display: flex;          /* フレックスボックスにする */
     flex-direction: column; /* 子要素を縦方向に並べる */
@@ -110,13 +109,15 @@ textarea {
 button {
     background-color: #4285f4;
     color: white;
-    padding: 10px 15px;
+    padding: 5px 10px;       /* パディングを小さく */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1em;
+    line-height: 1.2;      /* 行高を調整 */
     transition: background-color 0.3s ease;
-    margin-right: 10px;
+    margin-right: 5px;
+    vertical-align: middle; /* 追加: ボタンを垂直方向中央に */
 }
 
 button:hover {
@@ -183,4 +184,59 @@ button.delete:hover {
 
 .developer-info a:hover {
     text-decoration: underline; /* ホバー時に下線 */
+}
+
+/* style.css */
+
+/* (既存のスタイルは省略) */
+
+/* テーブル全体のレイアウトを固定 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* 列幅を明示的に指定 */
+th:nth-child(1), td:nth-child(1) { /* ドラッグハンドル */
+    width: 10%;
+}
+th:nth-child(2), td:nth-child(2) { /* タイトル */
+    width: 25%;
+}
+th:nth-child(3), td:nth-child(3) { /* 内容 */
+}
+th:nth-child(4), td:nth-child(4) { /* 操作 */
+    width: 15%;
+}
+
+/* (省略) */
+
+/* プロンプト内容の表示を1行に制限し、三点リーダーで省略 */
+.prompt-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+td {
+    vertical-align: middle; /* セル内の要素を垂直方向中央揃えに */
+}
+
+/* style.css に追加 */
+.header{
+    display: flex;
+    align-items: center; /*垂直方向中央揃え*/
+    flex-wrap: wrap;/*ロゴのサイズが大きい場合に折り返す*/
+}
+.logo-small {
+    width: 48px;  /* 幅を小さく */
+    height: 48px; /* 高さを小さく */
+    margin-right: 15px; /* h1との間に余白 */
+}
+
+h1 {
+    /* 既存のh1のスタイル */
+    margin-bottom: 0.8em; /* 見出し下の余白を調整 */
 }

@@ -18,26 +18,28 @@ function loadPrompts() {
 
 // グローバル変数として draggedItem を宣言
 let draggedItem = null;
+// options.js
 
+// (既存の関数、generateUUID, loadPrompts, handleDragStart, handleDragOver, handleDrop, handleDragEnd は省略)
 function displayPrompts(prompts) {
     const tableBody = document.getElementById('prompts-table-body');
     tableBody.innerHTML = '';
 
     prompts.forEach((prompt) => {
         const row = tableBody.insertRow();
-        row.draggable = true; // ドラッグ可能に
-        row.dataset.promptId = prompt.promptId; // データ属性として promptId を保持
+        row.draggable = true;
+        row.dataset.promptId = prompt.promptId;
 
-        // ドラッグハンドル用のセル (≡ アイコン)
         const handleCell = row.insertCell();
-        handleCell.innerHTML = '&#9776;'; // ≡ アイコン
-        handleCell.classList.add('drag-handle'); // CSS クラスを追加
+        handleCell.innerHTML = '&#9776;';
+        handleCell.classList.add('drag-handle');
 
         const titleCell = row.insertCell();
         titleCell.textContent = prompt.title;
 
         const contentCell = row.insertCell();
         contentCell.textContent = prompt.content;
+        contentCell.classList.add('prompt-content'); // ★ クラスを追加
 
         const actionsCell = row.insertCell();
         const editButton = document.createElement('button');
@@ -51,13 +53,14 @@ function displayPrompts(prompts) {
         deleteButton.addEventListener('click', () => deletePrompt(prompt.promptId));
         actionsCell.appendChild(deleteButton);
 
-        // イベントリスナーの設定
         row.addEventListener('dragstart', handleDragStart);
         row.addEventListener('dragover', handleDragOver);
         row.addEventListener('drop', handleDrop);
         row.addEventListener('dragend', handleDragEnd);
     });
 }
+
+// (addPrompt, editPrompt, saveEditedPrompt, deletePrompt 関数は省略)
 
 // ドラッグ開始時の処理
 function handleDragStart(e) {
