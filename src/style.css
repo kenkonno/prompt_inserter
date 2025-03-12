@@ -1,0 +1,186 @@
+/* style.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    height: 100vh; /* 全体スクロールを抑制 */
+    overflow: hidden;  /* 全体スクロールを抑制 */
+}
+
+.container {
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 30px;
+    width: 80%;
+    max-width: 800px;
+    margin-top: 20px;
+    display: flex;          /* フレックスボックスにする */
+    flex-direction: column; /* 子要素を縦方向に並べる */
+    height: 90vh;/*高さを指定*/
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 0.8em;
+    color: #4285f4;
+    border-bottom: 2px solid #4285f4;
+    padding-bottom: 0.2em;
+    flex-shrink: 0; /* h1は縮まない */
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    color: #333;
+    flex-shrink: 0;  /* h2 も縮まない */
+}
+
+/* 登録済みプロンプト */
+#prompts-list {
+    overflow-y: auto;  /* プロンプト一覧内でスクロール */
+    flex-grow: 1;     /* 残りの高さを占有 */
+    margin-bottom: 1em; /* 下に少し余白 */
+}
+
+/* テーブルのスタイル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f0f4f8;
+    color: #333;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* フォームのスタイル */
+.form-group {
+    margin-bottom: 1.2em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #555;
+    font-weight: 600;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
+textarea {
+    height: 100px; /* 初期値を調整。max-height と組み合わせて使う */
+    resize: vertical;
+}
+/* プロンプト追加エリア */
+#add-prompt {
+    max-height: 30vh;  /* 最大高さを 30vh に制限 */
+    overflow-y: auto;  /* 内容がはみ出る場合はスクロール */
+    flex-shrink: 0; /*縮まない*/
+}
+
+/* ボタンのスタイル */
+button {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #3367d6;
+}
+button.delete{
+    background-color: #db4437; /* Google Red */
+}
+button.delete:hover {
+    background-color: #c23321;
+}
+
+/* レスポンシブ対応 (例) */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+        height: 95vh;
+    }
+    table {
+        font-size: 0.9em;
+    }
+    #add-prompt{
+        max-height: 40vh;
+    }
+}
+/* style.css */
+
+/* (既存のスタイルは省略) */
+.drag-handle {
+    cursor: grab; /* ドラッグできることを示すカーソル */
+    text-align: center;
+    user-select: none; /* テキスト選択を無効化 */
+    padding-right: 8px;
+}
+
+/* ドラッグ中の行のスタイル */
+.dragging {
+    opacity: 0.5; /* 半透明にする */
+    background-color: #f0f8ff; /* 背景色を変える */
+}
+/* ドロップ対象の行のスタイル */
+.drop-target {
+    background-color: #e0f2ff; /* ドロップ可能な場所の背景色 */
+    border: 2px dashed #4285f4;
+}
+
+/* style.css */
+
+/* (既存のスタイルは省略) */
+
+/* 開発者情報 */
+.developer-info {
+    text-align: center; /* 中央揃え */
+    margin-top: 20px; /* 上部に余白 */
+    color: #777; /* 控えめな色 */
+    font-size: 0.9em;
+}
+
+.developer-info a {
+    color: #4285f4; /* リンクの色 (Google Blue) */
+    text-decoration: none; /* 下線を消す */
+}
+
+.developer-info a:hover {
+    text-decoration: underline; /* ホバー時に下線 */
+}

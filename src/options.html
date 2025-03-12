@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>システムプロンプト管理</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>システムプロンプト管理</h1>
+
+    <div id="prompts-list">
+        <h2>登録済みプロンプト</h2>
+        <table>
+            <thead>
+            <tr>
+                <th></th> <th>タイトル</th>
+                <th>内容</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="prompts-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="add-prompt">
+        <h2>プロンプトの追加</h2>
+        <div class="form-group">
+            <label for="new-prompt-title">タイトル:</label>
+            <input type="text" id="new-prompt-title" placeholder="例：メール返信用のプロンプト">
+        </div>
+        <div class="form-group">
+            <label for="new-prompt-content">内容:</label>
+            <textarea id="new-prompt-content" placeholder="ここにプロンプトの内容を入力してください。"></textarea>
+        </div>
+        <button id="add-prompt-button">プロンプトを追加</button>
+    </div>
+
+    <div class="developer-info">
+        <p>Developed by <a href="https://x.com/konno_ken" target="_blank">@konno_ken</a> with assistance from Gemini</p>
+    </div>
+</div>
+
+<script src="options.js"></script>
+</body>
+</html>
